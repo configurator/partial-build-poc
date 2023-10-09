@@ -1,4 +1,7 @@
 module.exports = {
 	output: 'export',
-	pageExtensions: ['build.js'],
 };
+
+if (process.env.PARTIAL_BUILD) {
+	module.exports.pageExtensions = ['build.js'];
+}
