@@ -5,7 +5,15 @@
 	"license": "MIT",
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build"
+		"clean": "yarn clean:postbuild && rm -rf out out.*",
+		"clean:postbuild": "rm -f app/*.build.js app/*/*.build.js",
+		"build:base-command": "rm -rf out && next build --experimental-app-only --experimental-turbo",
+		"build:a": "rm -rf out.a && cp app/page.js app/page.build.js && cp app/layout.js app/layout.build.js && cp app/a/page.js app/a/page.build.js && yarn build:base-command && mv out out.a && yarn clean:postbuild",
+		"build:b": "rm -rf out.b && cp app/page.js app/page.build.js && cp app/layout.js app/layout.build.js && cp app/b/page.js app/a/page.build.js && yarn build:base-command && mv out out.b && yarn clean:postbuild",
+		"build:combine": "rm -rf out.combineed && mkdir out.combined && cp -r out.a/* out.combined && cp -r out.b/* out.combined",
+		"build": "yarn clean && yarn build:a && yarn build:b && yarn build:combine",
+		"serve": "cd out.combined && serve",
+		"test-static": "yarn build && yarn serve"
 	},
 	"dependencies": {
 		"next": "^13.5.4",
@@ -13,6 +21,7 @@
 		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
-		"prettier": "^3.0.3"
+		"prettier": "^3.0.3",
+		"serve": "^14.2.1"
 	}
 }
